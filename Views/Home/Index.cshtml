@@ -1,0 +1,106 @@
+﻿@model EmpireForm.Models.RegistrantViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>Registration Form</h2>
+
+<div class="regForm">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-2">
+                    First Name
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Fname, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Fname, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    Last Name
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Lname, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Lname, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input type="submit" value="Submit" onClick=showPostInfo() class="btn btn-default" />
+                    <br /><br />
+                    <p> <span id="submittedVal"></span> </p>
+
+                </div>
+            </div>
+        </div>
+    }
+    <script type="text/JavaScript">
+        //I wasn't sure whether you were asking for something like this for the JS part or a list of submissions, which I'll add below.
+        function showPostInfo() {
+            var fname = document.getElementById("Fname").value;
+            var lname = document.getElementById("Lname").value;
+            submittedVal.innerHTML = fname + " " + lname + " submitted";
+        }
+    </script>
+</div>
+
+<h2>Registrants So Far</h2>
+<div id="registrationData"></div>
+<script>
+    fetch('http://hartempire.azurewebsites.net/api/registration')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            appendData(data);
+        })
+        .catch(function (err) {
+            console.log('error: ' + err);
+        });
+    function appendData(data) {
+        var mainContainer = document.getElementById("registrationData");
+        for (var i = 0; i < data.length; i++) {
+            var div = document.createElement("div");
+            div.innerHTML = data[i].fname + ' ' + data[i].lname;
+            mainContainer.appendChild(div);
+        }
+    }
+</script>
+
+<h2>Popular Flooring Styles</h2>
+<div class="row">
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\3820.jpg" alt="Commercial Carpet" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\4690.jpg" alt="Wood Looking Laminate" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\5512.jpg" alt="Fancy Tile" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\7226.jpg" alt="Vinyl Plank" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\8781.jpg" alt="Engineered Wood" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\8824.jpg" alt="Plush Carpet" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\8980.jpg" alt="Porcelain Tile" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3">
+        <img class="floor-tiles" src="\Content\images\9306.jpg" alt="Gunstock Oak" />
+    </div>
+
+</div>
